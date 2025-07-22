@@ -6,14 +6,14 @@
   },
   "regions": ["iad1"],
   "env": {
-    "VWO_ACCOUNT_ID": "@vwo_account_id",
-    "VWO_SDK_KEY": "@vwo_sdk_key",
-    "VWO_FLAG_KEY": "@vwo_flag_key",
-    "VWO_EVENT_NAME": "@vwo_event_name",
-    "VWO_USER_ATTRIBUTES": "@vwo_user_attributes",
-    "VWO_CUSTOM_VARIABLES": "@vwo_custom_variables",
-    "VWO_LOG_LEVEL": "@vwo_log_level",
-    "VWO_VARIABLE_KEY_1": "@vwo_variable_key_1",
-    "VWO_VARIABLE_KEY_2": "@vwo_variable_key_2"
+    "VWO_ACCOUNT_ID": "$VWO_ACCOUNT_ID",
+    "VWO_SDK_KEY": "$VWO_SDK_KEY",
+    "VWO_FLAG_KEY": "$VWO_FLAG_KEY",
+    "VWO_EVENT_NAME": "$VWO_EVENT_NAME",
+    "VWO_USER_ATTRIBUTES": "$VWO_USER_ATTRIBUTES",
+    "VWO_CUSTOM_VARIABLES": "$VWO_CUSTOM_VARIABLES",
+    "VWO_LOG_LEVEL": "$VWO_LOG_LEVEL",
+    "VWO_VARIABLE_KEY_1": "$VWO_VARIABLE_KEY_1",
+    "VWO_VARIABLE_KEY_2": "$VWO_VARIABLE_KEY_2"
   }
 } 
