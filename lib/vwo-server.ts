@@ -190,19 +190,37 @@ export async function initializeVWOClient(): Promise<IVWOClient> {
         "collectionPrefix": "as01"
     };
       addLog('debug', 'Calling VWO init function...');
+      addLog('debug', `VWO logger config - level: ${config.vwo.logLevel}`);
+      addLog('debug', `Available LogLevelEnum values: ${JSON.stringify(LogLevelEnum)}`);
+      
+      // Try with explicit DEBUG level
+      const loggerConfig = {
+        level: LogLevelEnum.DEBUG,
+        transport: {
+          log: (level: string, message: string) => {
+            console.log(`[VWO SDK ${level.toUpperCase()}]`, message);
+            addLog('info', `VWO SDK LOG CAPTURED - Level: ${level}, Message: ${message}`);
+          }
+        },
+      };
+      
+      // Test if our logger transport works
+      addLog('debug', 'Testing logger transport function...');
+      try {
+        loggerConfig.transport.log('TEST', 'Logger transport test message');
+        addLog('debug', 'Logger transport test completed');
+      } catch (error) {
+        addLog('error', `Logger transport test failed: ${error}`);
+      }
+      
+      addLog('debug', `Logger config being passed: ${JSON.stringify(loggerConfig, null, 2)}`);
+      
       const client = await init({
         accountId: config.vwo.accountId,
         sdkKey: config.vwo.sdkKey,
         shouldWaitForTrackingCalls: true,
         settings: settings,
-        logger: {
-          level: config.vwo.logLevel,
-          transport: {
-            log: (level: string, message: string) => {
-              addLog(level, message);
-            }
-          },
-        },
+        logger: loggerConfig,
       });
 
       addLog('debug', 'VWO init function completed successfully');

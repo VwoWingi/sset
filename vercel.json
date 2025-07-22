@@ -1,12 +1,3 @@
 {
-  "regions": ["iad1"],
-  "env": {
-    "VWO_ACCOUNT_ID": "$VWO_ACCOUNT_ID",
-    "VWO_SDK_KEY": "$VWO_SDK_KEY",
-    "VWO_FLAG_KEY": "$VWO_FLAG_KEY",
-    "VWO_EVENT_NAME": "$VWO_EVENT_NAME",
-    "VWO_LOG_LEVEL": "$VWO_LOG_LEVEL",
-    "VWO_VARIABLE_KEY_1": "$VWO_VARIABLE_KEY_1",
-    "VWO_VARIABLE_KEY_2": "$VWO_VARIABLE_KEY_2"
-  }
+  "regions": ["iad1"]
 } 
