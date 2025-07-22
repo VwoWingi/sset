@@ -56,16 +56,25 @@ function addLog(level: string, message: string): void {
 
 // Initialize VWO SDK (singleton)
 export async function initializeVWOClient(): Promise<IVWOClient> {
+  addLog('debug', 'initializeVWOClient called');
+  
   if (vwoClient) {
+    addLog('debug', 'Returning existing VWO client');
     return vwoClient;
   }
 
   if (initializationPromise) {
+    addLog('debug', 'Returning existing initialization promise');
     return initializationPromise;
   }
 
+  addLog('debug', 'Starting new VWO SDK initialization');
+  addLog('debug', `Runtime environment: ${typeof process !== 'undefined' ? 'Node.js' : 'Browser'}`);
+  addLog('debug', `Process env available: ${typeof process?.env !== 'undefined'}`);
+  
   initializationPromise = (async () => {
     try {
+      addLog('debug', 'Running config validation');
       // Validate configuration first
       const validation = validateConfig();
       if (!validation.isValid) {
@@ -75,6 +84,7 @@ export async function initializeVWOClient(): Promise<IVWOClient> {
       }
 
       addLog('info', 'Initializing VWO SDK on server...');
+      addLog('debug', `Account ID: ${config.vwo.accountId}, SDK Key: ${config.vwo.sdkKey}`);
 
       const settings = {
         "version": 1,
@@ -179,6 +189,7 @@ export async function initializeVWOClient(): Promise<IVWOClient> {
         "sdkKey": "0f892fb9c5b4a527a924ce20fa2c2f3f",
         "collectionPrefix": "as01"
     };
+      addLog('debug', 'Calling VWO init function...');
       const client = await init({
         accountId: config.vwo.accountId,
         sdkKey: config.vwo.sdkKey,
@@ -194,11 +205,16 @@ export async function initializeVWOClient(): Promise<IVWOClient> {
         },
       });
 
+      addLog('debug', 'VWO init function completed successfully');
       vwoClient = client;
       addLog('info', 'VWO SDK initialized successfully on server');
       return client;
     } catch (error: any) {
       addLog('error', `Failed to initialize VWO SDK: ${error.message}`);
+      addLog('error', `Error stack: ${error.stack}`);
+      if (error.cause) {
+        addLog('error', `Error cause: ${JSON.stringify(error.cause)}`);
+      }
       throw new Error(`VWO SDK initialization failed: ${error.message}`);
     }
   })();
@@ -209,6 +225,7 @@ export async function initializeVWOClient(): Promise<IVWOClient> {
 // Evaluate flag and get response for a user
 export async function evaluateFlag(userId: string): Promise<VWOResponse> {
   try {
+    console.log('[VWO] evaluateFlag called for user:', userId);
     // Clear previous logs at the start of each evaluation
     logs.length = 0;
     
@@ -222,7 +239,9 @@ export async function evaluateFlag(userId: string): Promise<VWOResponse> {
     const trimmedUserId = userId.trim();
     addLog('info', `Evaluating flag for user: ${trimmedUserId}`);
     
+    console.log('[VWO] About to call initializeVWOClient');
     const client = await initializeVWOClient();
+    console.log('[VWO] initializeVWOClient completed, client:', !!client);
     
     const userContext = {
       id: trimmedUserId,

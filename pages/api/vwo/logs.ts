@@ -19,9 +19,9 @@ import { getLogs } from '../../../lib/vwo-server';
 import type { VWOLog } from '../../../lib/vwo-server';
 
 // Use Node.js runtime for better compatibility with VWO SDK
-// export const config = {
-//   runtime: 'nodejs',
-// };
+export const config = {
+  runtime: 'nodejs',
+};
 
 interface LogsResponse {
   success: boolean;
