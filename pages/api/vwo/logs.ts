@@ -18,7 +18,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getLogs } from '../../../lib/vwo-server';
 import type { VWOLog } from '../../../lib/vwo-server';
 
-// Use Node.js runtime for better compatibility with VWO SDK
+// Use Node.js runtime (required for VWO SDK compatibility)
 export const config = {
   runtime: 'nodejs',
 };

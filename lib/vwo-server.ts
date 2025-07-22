@@ -54,25 +54,21 @@ function addLog(level: string, message: string): void {
   console.log(`[VWO ${level.toUpperCase()}] ${timestamp} ${message}`);
 }
 
-// Initialize VWO SDK (singleton)
+/**
+ * Initialize VWO SDK (singleton pattern)
+ * Returns the same client instance for subsequent calls
+ */
 export async function initializeVWOClient(): Promise<IVWOClient> {
-  addLog('debug', 'initializeVWOClient called');
-  
   if (vwoClient) {
-    addLog('debug', 'Returning existing VWO client');
     return vwoClient;
   }
 
   if (initializationPromise) {
-    addLog('debug', 'Returning existing initialization promise');
     return initializationPromise;
   }
 
-  addLog('debug', 'Starting new VWO SDK initialization');
-  
   initializationPromise = (async () => {
     try {
-      addLog('debug', 'Running config validation');
       // Validate configuration first
       const validation = validateConfig();
       if (!validation.isValid) {
@@ -82,138 +78,26 @@ export async function initializeVWOClient(): Promise<IVWOClient> {
       }
 
       addLog('info', 'Initializing VWO SDK on server...');
-      addLog('debug', `Account ID: ${config.vwo.accountId}, SDK Key: ${config.vwo.sdkKey}`);
-
-      const settings = {
-        "version": 1,
-        "accountId": 1116972,
-        "features": [
-            {
-                "metrics": [
-                    {
-                        "type": "CUSTOM_GOAL",
-                        "identifier": "testEvent",
-                        "id": 1
-                    }
-                ],
-                "id": 2,
-                "key": "proxy",
-                "status": "ON",
-                "type": "FEATURE_FLAG",
-                "rules": [
-                    {
-                        "variationId": 1,
-                        "campaignId": 3,
-                        "ruleKey": "rolloutRule1",
-                        "type": "FLAG_ROLLOUT"
-                    },
-                    {
-                        "campaignId": 4,
-                        "ruleKey": "testingRule1",
-                        "type": "FLAG_TESTING"
-                    }
-                ],
-                "name": "proxy",
-                "impactCampaign": {}
-            }
-        ],
-        "campaigns": [
-            {
-                "id": 3,
-                "segments": {},
-                "key": "proxy_rolloutRule1",
-                "status": "RUNNING",
-                "isAlwaysCheckSegment": false,
-                "type": "FLAG_ROLLOUT",
-                "isForcedVariationEnabled": false,
-                "variations": [
-                    {
-                        "variables": [
-                            {
-                                "key": "adsf",
-                                "id": 1,
-                                "value": "fdas",
-                                "type": "string"
-                            }
-                        ],
-                        "segments": {},
-                        "name": "Rollout-rule-1",
-                        "id": 1,
-                        "weight": 100
-                    }
-                ],
-                "name": "proxy : Rollout"
-            },
-            {
-                "percentTraffic": 100,
-                "id": 4,
-                "segments": {},
-                "key": "proxy_testingRule1",
-                "status": "RUNNING",
-                "isAlwaysCheckSegment": false,
-                "type": "FLAG_TESTING",
-                "isForcedVariationEnabled": false,
-                "variations": [
-                    {
-                        "variables": [
-                            {
-                                "key": "adsf",
-                                "id": 1,
-                                "value": "fdas",
-                                "type": "string"
-                            }
-                        ],
-                        "id": 1,
-                        "name": "Default",
-                        "weight": 50
-                    },
-                    {
-                        "variables": [
-                            {
-                                "key": "adsf",
-                                "id": 1,
-                                "value": "fdas",
-                                "type": "string"
-                            }
-                        ],
-                        "id": 2,
-                        "name": "Variation-1",
-                        "weight": 50
-                    }
-                ],
-                "name": "proxy : Testing rule 1"
-            }
-        ],
-        "sdkKey": "0f892fb9c5b4a527a924ce20fa2c2f3f",
-        "collectionPrefix": "as01"
-    };
-      addLog('debug', 'Calling VWO init function...');
       
       const client = await init({
         accountId: config.vwo.accountId,
         sdkKey: config.vwo.sdkKey,
         shouldWaitForTrackingCalls: true,
-        settings: settings,
         logger: {
-          level: LogLevelEnum.DEBUG, // Use explicit enum instead of config string
+          level: config.vwo.logLevel || LogLevelEnum.DEBUG,
           transport: {
             log: (level: string, message: string) => {
-              addLog(level, `VWO SDK: ${message}`);
+              addLog(level, message);
             }
           },
         },
       });
 
-      addLog('debug', 'VWO init function completed successfully');
       vwoClient = client;
       addLog('info', 'VWO SDK initialized successfully on server');
       return client;
     } catch (error: any) {
       addLog('error', `Failed to initialize VWO SDK: ${error.message}`);
-      addLog('error', `Error stack: ${error.stack}`);
-      if (error.cause) {
-        addLog('error', `Error cause: ${JSON.stringify(error.cause)}`);
-      }
       throw new Error(`VWO SDK initialization failed: ${error.message}`);
     }
   })();

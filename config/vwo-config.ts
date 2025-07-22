@@ -55,7 +55,9 @@ const config: Config = {
     eventName: process.env.VWO_EVENT_NAME || '',
     attributes: safeJsonParse(process.env.VWO_USER_ATTRIBUTES, {}),
     customVariables: safeJsonParse(process.env.VWO_CUSTOM_VARIABLES, {}),
-    logLevel: process.env.VWO_LOG_LEVEL || LogLevelEnum.DEBUG,
+    logLevel: Object.values(LogLevelEnum).includes(process.env.VWO_LOG_LEVEL as any) 
+      ? process.env.VWO_LOG_LEVEL as string 
+      : LogLevelEnum.DEBUG,
     variableKey1: process.env.VWO_VARIABLE_KEY_1 || 'model_name',
     variableKey2: process.env.VWO_VARIABLE_KEY_2 || 'query_answer',
   },
