@@ -16,6 +16,20 @@
 
 import { LogLevelEnum } from 'vwo-fme-node-sdk';
 
+// Helper function to safely parse JSON with fallback
+function safeJsonParse<T>(value: string | undefined, defaultValue: T): T {
+  if (!value || value.trim() === '') {
+    return defaultValue;
+  }
+  
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    console.warn(`Failed to parse JSON from environment variable: ${value}. Using default value.`);
+    return defaultValue;
+  }
+}
+
 interface VWOConfig {
   accountId: string;
   sdkKey: string;
@@ -39,12 +53,8 @@ const config: Config = {
     sdkKey: process.env.VWO_SDK_KEY || '',
     flagKey: process.env.VWO_FLAG_KEY || '',
     eventName: process.env.VWO_EVENT_NAME || '',
-    attributes: process.env.VWO_USER_ATTRIBUTES 
-      ? JSON.parse(process.env.VWO_USER_ATTRIBUTES) 
-      : {},
-    customVariables: process.env.VWO_CUSTOM_VARIABLES
-      ? JSON.parse(process.env.VWO_CUSTOM_VARIABLES)
-      : {},
+    attributes: safeJsonParse(process.env.VWO_USER_ATTRIBUTES, {}),
+    customVariables: safeJsonParse(process.env.VWO_CUSTOM_VARIABLES, {}),
     logLevel: process.env.VWO_LOG_LEVEL || LogLevelEnum.DEBUG,
     variableKey1: process.env.VWO_VARIABLE_KEY_1 || 'model_name',
     variableKey2: process.env.VWO_VARIABLE_KEY_2 || 'query_answer',
