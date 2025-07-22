@@ -35,7 +35,6 @@ export default async function handler(
   }
 
   try {
-    console.log('[VWO API] Evaluate endpoint called');
     const { userId } = req.body;
 
     if (!userId || typeof userId !== 'string' || userId.trim() === '') {
@@ -45,7 +44,6 @@ export default async function handler(
       });
     }
 
-    console.log(`[VWO API] Evaluating flag for user: ${userId}`);
     // Evaluate flag for the user
     const flagResult = await evaluateFlag(userId);
     

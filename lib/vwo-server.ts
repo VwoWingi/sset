@@ -69,8 +69,6 @@ export async function initializeVWOClient(): Promise<IVWOClient> {
   }
 
   addLog('debug', 'Starting new VWO SDK initialization');
-  addLog('debug', `Runtime environment: ${typeof process !== 'undefined' ? 'Node.js' : 'Browser'}`);
-  addLog('debug', `Process env available: ${typeof process?.env !== 'undefined'}`);
   
   initializationPromise = (async () => {
     try {
@@ -190,36 +188,20 @@ export async function initializeVWOClient(): Promise<IVWOClient> {
         "collectionPrefix": "as01"
     };
       addLog('debug', 'Calling VWO init function...');
-      addLog('debug', `VWO logger config - level: ${config.vwo.logLevel}`);
-      addLog('debug', `Available LogLevelEnum values: ${JSON.stringify(LogLevelEnum)}`);
-      
-      // Try with explicit DEBUG level
-      const loggerConfig = {
-        level: LogLevelEnum.DEBUG,
-        transport: {
-          log: (level: string, message: string) => {
-            console.log(`[VWO SDK ${level.toUpperCase()}]`, message);
-            addLog('info', `VWO SDK LOG CAPTURED - Level: ${level}, Message: ${message}`);
-          }
-        },
-      };
-      
-      // Test if our logger transport works
-      addLog('debug', 'Testing logger transport function...');
-      try {
-        loggerConfig.transport.log('TEST', 'Logger transport test message');
-        addLog('debug', 'Logger transport test completed');
-      } catch (error) {
-        addLog('error', `Logger transport test failed: ${error}`);
-      }
-      
-      addLog('debug', `Logger config being passed: ${JSON.stringify(loggerConfig, null, 2)}`);
       
       const client = await init({
         accountId: config.vwo.accountId,
         sdkKey: config.vwo.sdkKey,
         shouldWaitForTrackingCalls: true,
-        logger: loggerConfig,
+        settings: settings,
+        logger: {
+          level: LogLevelEnum.DEBUG, // Use explicit enum instead of config string
+          transport: {
+            log: (level: string, message: string) => {
+              addLog(level, `VWO SDK: ${message}`);
+            }
+          },
+        },
       });
 
       addLog('debug', 'VWO init function completed successfully');
@@ -242,7 +224,6 @@ export async function initializeVWOClient(): Promise<IVWOClient> {
 // Evaluate flag and get response for a user
 export async function evaluateFlag(userId: string): Promise<VWOResponse> {
   try {
-    console.log('[VWO] evaluateFlag called for user:', userId);
     // Clear previous logs at the start of each evaluation
     logs.length = 0;
     
@@ -256,9 +237,7 @@ export async function evaluateFlag(userId: string): Promise<VWOResponse> {
     const trimmedUserId = userId.trim();
     addLog('info', `Evaluating flag for user: ${trimmedUserId}`);
     
-    console.log('[VWO] About to call initializeVWOClient');
     const client = await initializeVWOClient();
-    console.log('[VWO] initializeVWOClient completed, client:', !!client);
     
     const userContext = {
       id: trimmedUserId,
