@@ -1,0 +1,19 @@
+{
+  "functions": {
+    "pages/api/**/*.ts": {
+      "runtime": "experimental-edge"
+    }
+  },
+  "regions": ["iad1"],
+  "env": {
+    "VWO_ACCOUNT_ID": "@vwo_account_id",
+    "VWO_SDK_KEY": "@vwo_sdk_key",
+    "VWO_FLAG_KEY": "@vwo_flag_key",
+    "VWO_EVENT_NAME": "@vwo_event_name",
+    "VWO_USER_ATTRIBUTES": "@vwo_user_attributes",
+    "VWO_CUSTOM_VARIABLES": "@vwo_custom_variables",
+    "VWO_LOG_LEVEL": "@vwo_log_level",
+    "VWO_VARIABLE_KEY_1": "@vwo_variable_key_1",
+    "VWO_VARIABLE_KEY_2": "@vwo_variable_key_2"
+  }
+} 
