@@ -75,11 +75,115 @@ export async function initializeVWOClient(): Promise<IVWOClient> {
       }
 
       addLog('info', 'Initializing VWO SDK on server...');
-      
+
+      const settings = {
+        "version": 1,
+        "accountId": 1116972,
+        "features": [
+            {
+                "metrics": [
+                    {
+                        "type": "CUSTOM_GOAL",
+                        "identifier": "testEvent",
+                        "id": 1
+                    }
+                ],
+                "id": 2,
+                "key": "proxy",
+                "status": "ON",
+                "type": "FEATURE_FLAG",
+                "rules": [
+                    {
+                        "variationId": 1,
+                        "campaignId": 3,
+                        "ruleKey": "rolloutRule1",
+                        "type": "FLAG_ROLLOUT"
+                    },
+                    {
+                        "campaignId": 4,
+                        "ruleKey": "testingRule1",
+                        "type": "FLAG_TESTING"
+                    }
+                ],
+                "name": "proxy",
+                "impactCampaign": {}
+            }
+        ],
+        "campaigns": [
+            {
+                "id": 3,
+                "segments": {},
+                "key": "proxy_rolloutRule1",
+                "status": "RUNNING",
+                "isAlwaysCheckSegment": false,
+                "type": "FLAG_ROLLOUT",
+                "isForcedVariationEnabled": false,
+                "variations": [
+                    {
+                        "variables": [
+                            {
+                                "key": "adsf",
+                                "id": 1,
+                                "value": "fdas",
+                                "type": "string"
+                            }
+                        ],
+                        "segments": {},
+                        "name": "Rollout-rule-1",
+                        "id": 1,
+                        "weight": 100
+                    }
+                ],
+                "name": "proxy : Rollout"
+            },
+            {
+                "percentTraffic": 100,
+                "id": 4,
+                "segments": {},
+                "key": "proxy_testingRule1",
+                "status": "RUNNING",
+                "isAlwaysCheckSegment": false,
+                "type": "FLAG_TESTING",
+                "isForcedVariationEnabled": false,
+                "variations": [
+                    {
+                        "variables": [
+                            {
+                                "key": "adsf",
+                                "id": 1,
+                                "value": "fdas",
+                                "type": "string"
+                            }
+                        ],
+                        "id": 1,
+                        "name": "Default",
+                        "weight": 50
+                    },
+                    {
+                        "variables": [
+                            {
+                                "key": "adsf",
+                                "id": 1,
+                                "value": "fdas",
+                                "type": "string"
+                            }
+                        ],
+                        "id": 2,
+                        "name": "Variation-1",
+                        "weight": 50
+                    }
+                ],
+                "name": "proxy : Testing rule 1"
+            }
+        ],
+        "sdkKey": "0f892fb9c5b4a527a924ce20fa2c2f3f",
+        "collectionPrefix": "as01"
+    };
       const client = await init({
         accountId: config.vwo.accountId,
         sdkKey: config.vwo.sdkKey,
         shouldWaitForTrackingCalls: true,
+        settings: settings,
         logger: {
           level: config.vwo.logLevel,
           transport: {
