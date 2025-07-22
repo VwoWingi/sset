@@ -18,10 +18,10 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getLogs } from '../../../lib/vwo-server';
 import type { VWOLog } from '../../../lib/vwo-server';
 
-// Configure for Edge Runtime
-export const config = {
-  runtime: 'edge',
-};
+// Use Node.js runtime for better compatibility with VWO SDK
+// export const config = {
+//   runtime: 'nodejs',
+// };
 
 interface LogsResponse {
   success: boolean;

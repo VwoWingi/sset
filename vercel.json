@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "pages/api/**/*.ts": {
-      "runtime": "edge"
-    }
-  },
   "regions": ["iad1"],
   "env": {
     "VWO_ACCOUNT_ID": "$VWO_ACCOUNT_ID",

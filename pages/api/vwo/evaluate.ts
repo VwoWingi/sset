@@ -18,10 +18,10 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { evaluateFlag, trackEvent } from '../../../lib/vwo-server';
 import type { VWOResponse } from '../../../lib/vwo-server';
 
-// Configure for Edge Runtime
-export const config = {
-  runtime: 'edge',
-};
+// Use Node.js runtime for better compatibility with VWO SDK
+// export const config = {
+//   runtime: 'nodejs',
+// };
 
 export default async function handler(
   req: NextApiRequest,
