@@ -1,7 +1,7 @@
 {
   "functions": {
     "pages/api/**/*.ts": {
-      "runtime": "experimental-edge"
+      "runtime": "edge"
     }
   },
   "regions": ["iad1"],

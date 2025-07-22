@@ -18,9 +18,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getLogs } from '../../../lib/vwo-server';
 import type { VWOLog } from '../../../lib/vwo-server';
 
-// Configure for Experimental Edge Runtime
+// Configure for Edge Runtime
 export const config = {
-  runtime: 'experimental-edge',
+  runtime: 'edge',
 };
 
 interface LogsResponse {

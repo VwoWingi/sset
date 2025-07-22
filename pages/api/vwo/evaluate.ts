@@ -18,9 +18,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { evaluateFlag, trackEvent } from '../../../lib/vwo-server';
 import type { VWOResponse } from '../../../lib/vwo-server';
 
-// Configure for Experimental Edge Runtime
+// Configure for Edge Runtime
 export const config = {
-  runtime: 'experimental-edge',
+  runtime: 'edge',
 };
 
 export default async function handler(

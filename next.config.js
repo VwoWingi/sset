@@ -2,9 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  experimental: {
-    runtime: 'experimental-edge',
-  },
   // Optimize for Vercel Edge Functions
   poweredByHeader: false,
   generateEtags: false,
