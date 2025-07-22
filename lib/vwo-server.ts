@@ -219,7 +219,6 @@ export async function initializeVWOClient(): Promise<IVWOClient> {
         accountId: config.vwo.accountId,
         sdkKey: config.vwo.sdkKey,
         shouldWaitForTrackingCalls: true,
-        settings: settings,
         logger: loggerConfig,
       });
 
