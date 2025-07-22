@@ -79,6 +79,7 @@ export async function initializeVWOClient(): Promise<IVWOClient> {
       const client = await init({
         accountId: config.vwo.accountId,
         sdkKey: config.vwo.sdkKey,
+        shouldWaitForTrackingCalls: true,
         logger: {
           level: config.vwo.logLevel,
           transport: {
